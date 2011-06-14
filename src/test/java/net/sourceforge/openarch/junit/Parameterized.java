@@ -113,8 +113,12 @@ public class Parameterized extends Suite {
 
         @Override
         public Object createTest() throws Exception {
-            return getTestClass().getOnlyConstructor().newInstance(
-                    computeParams());
+            if (isParameterized()) {
+                return getTestClass().getOnlyConstructor().newInstance(
+                        computeParams());
+            } else {
+                return getTestClass().getOnlyConstructor().newInstance();
+            }
         }
 
         private Object[] computeParams() throws Exception {
@@ -216,15 +220,13 @@ public class Parameterized extends Suite {
     public Parameterized(Class<?> klass) throws Throwable {
         super(klass, Collections.<Runner> emptyList());
         List<Object[]> parametersList = getParametersList(getTestClass());
-        if (parametersList.size() > 0) {
-            try {
-                runners.add(new TestClassRunnerForNonParameterized(
-                        getTestClass().getJavaClass(), parametersList, 0));
-            } catch (InitializationError e) {
-                for (Throwable t : e.getCauses()) {
-                    if (!(t instanceof NoTestsException)) {
-                        throw e;
-                    }
+        try {
+            runners.add(new TestClassRunnerForNonParameterized(
+                    getTestClass().getJavaClass(), parametersList, 0));
+        } catch (InitializationError e) {
+            for (Throwable t : e.getCauses()) {
+                if (!(t instanceof NoTestsException)) {
+                    throw e;
                 }
             }
         }

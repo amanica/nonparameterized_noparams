@@ -17,6 +17,15 @@ public abstract class AbstractTestParameterized {
     @Rule
     public TestName testName = new TestName();
 
+    /*
+     * called by non-parameterized tests
+     */
+    public AbstractTestParameterized() {
+    }
+
+    /*
+     * called by parameterized tests
+     */
     public AbstractTestParameterized(int param) {
         this.param = param;
     }

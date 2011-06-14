@@ -11,6 +11,9 @@ import org.junit.runner.RunWith;
 @RunWith(value = Parameterized.class)
 public class TestSomeParameterized extends AbstractTestParameterized {
 
+    public TestSomeParameterized() {
+    }
+
     public TestSomeParameterized(int param) {
         super(param);
     }
